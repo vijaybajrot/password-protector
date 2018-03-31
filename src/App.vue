@@ -8,8 +8,8 @@
 
     <div class="row">
       <div class="col-sm-12">
-        <router-link to="/foo" class="btn btn-primary">Add New</router-link>
-        <router-link to="/bar" class="btn btn-primary">Go to List</router-link>
+        <router-link to="/add" class="btn btn-primary">Add New</router-link>
+        <router-link to="/" class="btn btn-primary">Go to List</router-link>
       </div>
     </div>
     <div class="row">
