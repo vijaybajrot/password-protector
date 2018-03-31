@@ -3,12 +3,12 @@ class Error{
         this.errors = {};
     }
 
-    store(error){
-        this.errors[error] = error;
+    store(errorKey,value){
+        this.errors[errorKey] = value;
     }
     
     has(errorKey){
-        return this.errors.hasOwnProperty(errorKey);
+        return this.errors.hasOwnProperty(errorKey) == true;
     }
     
     get(errorKey){

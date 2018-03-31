@@ -11,17 +11,17 @@
         <div class="form-group">
           <label for="website">Website</label>
           <input type="text" class="form-control" id="website" aria-describedby="websiteHelp" placeholder="Enter Website Name" v-model="website">
-          <small v-if="showValidationErrors && errors.hasOwnProperty('website')" id="websiteHelp" class="form-text text-danger pl-1">{{ errors.website }}</small>
+          <small v-show="errors.has('website')" id="websiteHelp" class="form-text text-danger pl-1">{{ errors.get('website') }}</small>
         </div>
         <div class="form-group">
           <label for="username">Username</label>
           <input type="text" class="form-control" id="username" aria-describedby="usernameHelp" placeholder="Enter Username" v-model="username">
-          <small v-if="showValidationErrors && errors.hasOwnProperty('username')" id="usernameHelp" class="form-text text-danger pl-1">{{ errors.username }}</small>
+          <small v-show="errors.has('username')" id="usernameHelp" class="form-text text-danger pl-1">{{ errors.get('username') }}</small>
         </div>
         <div class="form-group">
           <label for="password">Password</label>
           <input :type="passwordType" class="form-control" id="password" placeholder="Password" v-model="password">
-          <small v-if="showValidationErrors && errors.hasOwnProperty('password')" id="passwordHelp" class="form-text text-danger pl-1">{{ errors.password }}</small>
+          <small v-show="errors.has('password')" id="passwordHelp" class="form-text text-danger pl-1">{{ errors.get('password') }}</small>
           <small class="form-text text-muted pl-1"><a href="javascript:void(0)" @click="togglePasswordType">{{ showHidePasswordText }}</a></small>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
@@ -43,8 +43,7 @@ export default {
       password : null,
       passwordType : 'text',
       showHidePasswordText : 'Show Password',
-      errors : {},
-      showValidationErrors : false
+      errors : new Error,
     }
   },
   methods : {
@@ -59,29 +58,27 @@ export default {
     },
     validateForm(event){
       if(this.website && this.username && this.password) return true;
-      if(!this.website) this.errors.website = "Website field is required";
-      if(!this.username) this.errors.username = "Username field is required";
-      if(!this.password) this.errors.password = "Password field is required";
-      this.showValidationErrors = true;
+      if(!this.website) this.errors.store('website' ,"Website field is required");
+      if(!this.username) this.errors.store('username', "Username field is required");
+      if(!this.password) this.errors.store('password', "Password field is required");
       event.preventDefault();
     }
   },
   watch: {
     website : function (){
-      if(this.website) delete this.errors.website;
+      if(this.website) this.errors.delete('website');
     },
     username : function (){
-      if(this.username) delete this.errors.username;
+      if(this.username) this.errors.delete('username');
     },
     password : function (){
-      if(this.password) delete this.errors.password;
+      if(this.password) this.errors.delete('password');
     }
   },
   computed : {
 
   },
   mounted(){
-    new Error();
   }
 }
 </script>
