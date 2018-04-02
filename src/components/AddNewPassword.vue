@@ -7,21 +7,21 @@
   </div>
   <div class="row">
     <div class="col-sm-12">
-      <form @submit="validateForm" action="/">
+      <form @submit.prevent="validateForm" action="/">
         <div class="form-group">
           <label for="website">Website</label>
-          <input type="text" class="form-control" id="website" aria-describedby="websiteHelp" placeholder="Enter Website Name" v-model="website">
-          <small v-show="errors.has('website')" id="websiteHelp" class="form-text text-danger pl-1">{{ errors.get('website') }}</small>
+          <input type="text" class="form-control" id="website" aria-describedby="websiteHelp" placeholder="Enter Website Name" v-model="website" autocomplete="off">
+          <small v-if="showErrors && errors.has('website')" id="websiteHelp" class="form-text text-danger pl-1">{{ errors.get('website') }}</small>
         </div>
         <div class="form-group">
           <label for="username">Username</label>
-          <input type="text" class="form-control" id="username" aria-describedby="usernameHelp" placeholder="Enter Username" v-model="username">
-          <small v-show="errors.has('username')" id="usernameHelp" class="form-text text-danger pl-1">{{ errors.get('username') }}</small>
+          <input type="text" class="form-control" id="username" aria-describedby="usernameHelp" placeholder="Enter Username" v-model="username" autocomplete="off">
+          <small v-if="showErrors && errors.has('username')" id="usernameHelp" class="form-text text-danger pl-1">{{ errors.get('username') }}</small>
         </div>
         <div class="form-group">
           <label for="password">Password</label>
-          <input :type="passwordType" class="form-control" id="password" placeholder="Password" v-model="password">
-          <small v-show="errors.has('password')" id="passwordHelp" class="form-text text-danger pl-1">{{ errors.get('password') }}</small>
+          <input :type="passwordType" class="form-control" id="password" placeholder="Password" v-model="password" autocomplete="off">
+          <small v-if="showErrors && errors.has('password')" id="passwordHelp" class="form-text text-danger pl-1">{{ errors.get('password') }}</small>
           <small class="form-text text-muted pl-1"><a href="javascript:void(0)" @click="togglePasswordType">{{ showHidePasswordText }}</a></small>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
@@ -44,6 +44,7 @@ export default {
       passwordType : 'text',
       showHidePasswordText : 'Show Password',
       errors : new Error,
+      showErrors : false,
     }
   },
   methods : {
@@ -57,11 +58,24 @@ export default {
       }
     },
     validateForm(event){
-      if(this.website && this.username && this.password) return true;
+      if(this.website && this.username && this.password) return this.postData();
       if(!this.website) this.errors.store('website' ,"Website field is required");
       if(!this.username) this.errors.store('username', "Username field is required");
       if(!this.password) this.errors.store('password', "Password field is required");
-      event.preventDefault();
+      this.showErrors = true;
+    },
+    postData(){
+      axios.post(`/password`, {
+        website : this.website,
+        username : this.username,
+        password : this.password,
+      })
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e.data);
+      })
     }
   },
   watch: {
@@ -79,6 +93,7 @@ export default {
 
   },
   mounted(){
+    //console.log(serverUrl);
   }
 }
 </script>
