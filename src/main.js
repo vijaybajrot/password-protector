@@ -8,6 +8,8 @@ import './assets/sass/app.scss';
 
 window.serverUrl = "http://127.0.0.1:8000/api";
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+//axios.defaults.headers.common['X-CSRF-TOKEN'] = '';
 axios.defaults.baseURL = serverUrl;
 window.axios = axios;
 
