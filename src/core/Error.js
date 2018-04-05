@@ -12,7 +12,7 @@ class Error{
     }
     
     get(errorKey){
-        return this.errors[errorKey];
+        if(this.errors[errorKey]) return this.errors[errorKey];
     }
     
     delete(errorKey){
