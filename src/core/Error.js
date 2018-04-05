@@ -8,7 +8,10 @@ class Error{
     }
     
     has(errorKey){
-        return this.errors.hasOwnProperty(errorKey) == true;
+        if(this.errors.hasOwnProperty(errorKey)){
+            return true;
+        }
+        return false;
     }
     
     get(errorKey){
@@ -16,7 +19,7 @@ class Error{
     }
     
     delete(errorKey){
-        return delete this.errors[errorKey]
+        return delete this.errors[errorKey];
     }
 }
 
