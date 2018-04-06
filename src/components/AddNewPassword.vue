@@ -7,6 +7,19 @@
   </div>
   <div class="row">
     <div class="col-sm-12">
+      <div v-if="Object.keys(response).length != 0" >
+        <div :class="{
+            'alert' : Object.keys(response).length > 0, 
+            'alert-success' : response.leval == 'success' , 
+            'alert-danger' : response.leval == 'error'
+          }" role="alert">
+          {{ response.message }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
       <form @submit.prevent="validateForm" action="/">
         <div class="form-group">
           <label for="website">Website</label>
@@ -41,10 +54,11 @@ export default {
       website : null,
       username : null,
       password : null,
-      passwordType : 'text',
+      passwordType : 'password',
       showHidePasswordText : 'Show Password',
       errors : new Error,
       showErrors : false,
+      response : {},
     }
   },
   methods : {
@@ -58,7 +72,7 @@ export default {
       }
     },
     validateForm(event){
-      if(this.website && this.username && this.password) return this.getData();
+      if(this.website && this.username && this.password) return this.postData();
       if(!this.website) this.errors.store('website' ,"Website field is required");
       if(!this.username) this.errors.store('username', "Username field is required");
       if(!this.password) this.errors.store('password', "Password field is required");
@@ -66,11 +80,15 @@ export default {
     },
     getData(){
       console.log("getting data");
+      $vm = this;
       axios.get(`/password`)
       .then(response => {
+        $vm.response = response.data;
         console.log(response.data);
       })
       .catch(e => {
+        $vm.response.hasError = true;
+        $vm.response = e.data;
         console.log(e.data);
       })
     },
@@ -81,10 +99,11 @@ export default {
         password : this.password,
       })
       .then(response => {
-        console.log(response.data);
+        this.response = response.data;
       })
-      .catch(e => {
-        console.log(e.data);
+      .catch(error => {
+        this.response = error.data;
+        //this.response = e.data;
       })
     }
   },
@@ -97,13 +116,15 @@ export default {
     },
     password : function (){
       if(this.password) this.errors.delete('password');
-    }
+    },
   },
   computed : {
-
+    alertClass : function () {
+      return "alert-success";
+    }
   },
   mounted(){
-    //console.log(serverUrl);
+    jQuery(document.querySelector('.alert')).delay(5000).hide();
   }
 }
 </script>
