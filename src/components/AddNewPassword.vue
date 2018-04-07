@@ -5,19 +5,7 @@
       <h4>{{ msg }}</h4>
     </div>
   </div>
-  <div class="row">
-    <div class="col-sm-12">
-      <div v-if="Object.keys(response).length != 0" >
-        <div :class="{
-            'alert' : Object.keys(response).length > 0, 
-            'alert-success' : response.leval == 'success' , 
-            'alert-danger' : response.leval == 'error'
-          }" role="alert">
-          {{ response.message }}
-        </div>
-      </div>
-    </div>
-  </div>
+  <Alert :response="response"></Alert>
   <div class="row">
     <div class="col-sm-12">
       <form @submit.prevent="validateForm" action="/">
@@ -46,6 +34,7 @@
 
 <script>
 import Error from "@/core/Error";
+import Alert from '@/components/Alert';
 export default {
   name: 'AddNewPassword',
   data () {
@@ -59,7 +48,11 @@ export default {
       errors : new Error,
       showErrors : false,
       response : {},
+      hasResponse : false
     }
+  },
+  components : {
+    Alert
   },
   methods : {
     togglePasswordType () {
@@ -78,20 +71,6 @@ export default {
       if(!this.password) this.errors.store('password', "Password field is required");
       this.showErrors = true;
     },
-    getData(){
-      console.log("getting data");
-      $vm = this;
-      axios.get(`/password`)
-      .then(response => {
-        $vm.response = response.data;
-        console.log(response.data);
-      })
-      .catch(e => {
-        $vm.response.hasError = true;
-        $vm.response = e.data;
-        console.log(e.data);
-      })
-    },
     postData(){
       axios.post(`/password`, {
         website : this.website,
@@ -100,31 +79,32 @@ export default {
       })
       .then(response => {
         this.response = response.data;
+        this.$emit('dataPosted');
       })
       .catch(error => {
         this.response = error.data;
-        //this.response = e.data;
       })
     }
   },
   watch: {
-    website : function (){
+    website() {
       if(this.website) this.errors.delete('website');
     },
-    username : function (){
+    username() {
       if(this.username) this.errors.delete('username');
     },
-    password : function (){
+    password() {
       if(this.password) this.errors.delete('password');
     },
   },
   computed : {
-    alertClass : function () {
-      return "alert-success";
-    }
+    alertClass() { return "alert-success"; }
   },
   mounted(){
     jQuery(document.querySelector('.alert')).delay(5000).hide();
+    this.$on("dataPosted",function () {
+      this.hasResponse = true;
+    })
   }
 }
 </script>

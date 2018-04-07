@@ -7,61 +7,66 @@
   </div>
   <div class="row">
     <div class="col-sm-12">
-      <table class="table">
-        <thead class="thead-dark">
+      <table class="table table-outline-bordered">
+        <thead class="thead-light">
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">Website</th>
-            <th scope="col">Username</th>
-            <th scope="col">Password</th>
+            <th >#</th>
+            <th >Website</th>
+            <th >Username</th>
+            <th >Password</th>
+            <th width="10%">Action</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item,index in items">
-            <th scope="row">{{ index }}</th>
+          <tr v-for="item,index in items.data">
+            <th scope="row" v-text="index+1"></th>
             <td> {{ item.website }} </td>
             <td>{{ item.username }}</td>
             <td>{{ item.password }}</td>
+            <td ><button class="btn btn-primary">Show</button></td>
           </tr>
         </tbody>
       </table>
+      <Pagination :callback="getData" :for="items"></Pagination>
     </div>
   </div>
 </div>
 </template>
 
 <script>
+import Pagination from '@/components/Pagination';
 export default {
   name: 'PasswordList',
   data () {
     return {
       msg: 'Manage Passwords',
       items : [],
-      response : {}
+      paginate: ['passwords'],
+      response : {},
     }
   },
   methods : {
-    getData(){
-      console.log("getting data");
-      axios.get(`/password`)
+    getData(url = '/password'){
+      axios.get(url)
       .then(response => {
         this.items = response.data;
-        console.log(response.data);
       })
       .catch(e => {
         this.response.hasError = true;
         this.response = e.data;
-        console.log(e.data);
       })
     }
   },
   mounted(){
     this.getData();
+  },
+  components : {
+    Pagination
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+  .table-outline-bordered { border : 1px solid #ddd}
 </style>

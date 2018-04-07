@@ -2,18 +2,31 @@
   <div id="app">
     <div class="row">
       <div class="col-sm-12">
-        <h2>Password Protector</h2>
-      </div>
-    </div>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+          <a class="navbar-brand" href="#">Password Protector</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation" style="">
+            <span class="navbar-toggler-icon"></span>
+          </button>
 
-    <div class="row">
-      <div class="col-sm-12">
-        <router-link to="/add" class="btn btn-primary">Add New</router-link>
-        <router-link to="/" class="btn btn-primary">Go to List</router-link>
+          <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item" :class="{'active': 'router-link-active'}">
+                <router-link to="/" class="nav-link">Go to List</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/add" class="nav-link">Add New</router-link>
+              </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+              <input class="form-control mr-sm-2" type="text" placeholder="Search">
+              <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+            </form>
+          </div>
+        </nav>
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-12">
+      <div class="col-sm-12 mt-3 px-4">
         <router-view/>
       </div>
     </div>
@@ -22,7 +35,7 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
 }
 </script>
 
