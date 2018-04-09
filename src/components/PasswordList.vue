@@ -22,7 +22,7 @@
             <th scope="row" v-text="index+1"></th>
             <td> {{ item.website }} </td>
             <td>{{ item.username }}</td>
-            <td>{{ item.password }}</td>
+            <td><span class="--star-hashed-password"> {{ item.hashed_password | star_password | max }}</span></td>
             <td ><button class="btn btn-primary">Show</button></td>
           </tr>
         </tbody>
@@ -60,13 +60,30 @@ export default {
   mounted(){
     this.getData();
   },
+  created(){
+  },
   components : {
     Pagination
+  },
+  filters : {
+    star_password(value){
+      return value.replace(/\S/ig, '*');
+    },
+    words(value, words = 15){
+      return value.substr(0,words);
+    },
+    max(value, max = 15){
+      if(value.length > max){
+        return value.substr(0,max);
+      }
+      return value;
+    }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .table-outline-bordered { border : 1px solid #ddd}
+  .table-outline-bordered { border : 1px solid #ddd }
+  .--star-hashed-password { font-size: 1.75rem; font-weight: 700; }
 </style>

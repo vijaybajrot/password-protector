@@ -10,16 +10,16 @@
 
           <div class="collapse navbar-collapse" id="navbarColor01">
             <ul class="navbar-nav mr-auto">
-              <li class="nav-item" :class="{'active': 'router-link-active'}">
+              <li class="nav-item" :class="{'active': $route.name == 'PasswordList'}">
                 <router-link to="/" class="nav-link">Go to List</router-link>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" :class="{'active': $route.name == 'AddNewPassword'}">
                 <router-link to="/add" class="nav-link">Add New</router-link>
               </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
               <input class="form-control mr-sm-2" type="text" placeholder="Search">
-              <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+              <button class="btn btn-default my-2 my-sm-0" type="submit">Search</button>
             </form>
           </div>
         </nav>
