@@ -22,8 +22,9 @@
             <th scope="row" v-text="index+1"></th>
             <td> {{ item.website }} </td>
             <td>{{ item.username }}</td>
-            <td><span class="--star-hashed-password"> {{ item.hashed_password | star_password | max }}</span></td>
-            <td ><button class="btn btn-primary">Show</button></td>
+            <td v-show="$nextTick(() => { item.show_password.textContent == true })"><span class="--star-hashed-password"> {{ item.hashed_password | star_password | max }}</span></td>
+            <td v-show="$nextTick(() => { item.show_password.textContent == true })">{{ item.password }}</td>
+            <td ><button @click="item.show_password = true" class="btn btn-primary">Show</button></td>
           </tr>
         </tbody>
       </table>
@@ -50,6 +51,9 @@ export default {
       axios.get(url)
       .then(response => {
         this.items = response.data;
+        this.items.data.map((item) => {
+          return item = _.extend(item,{show_password : false});
+        });
       })
       .catch(e => {
         this.response.hasError = true;
